@@ -1,9 +1,9 @@
 {
   "name": "markdown-mindmap",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "main": "./lib/main",
   "description": "Visualize markdown files as mindmaps in Atom editor",
-  "repository": "https://github.com/dundalek/atom-markdown-mindmap",
+  "repository": "https://github.com/jhampton/atom-markdown-mindmap",
   "license": "MIT",
   "engines": {
     "atom": "*"

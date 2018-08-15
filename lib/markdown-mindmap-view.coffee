@@ -232,6 +232,7 @@ class MarkdownMindmapView extends ScrollView
       console.log(node)
       if node.href and not (node.children or node._children)
         (new File(node.href)).read().then (text) =>
+          atom.workspace.open(node.href)
           data = markmapParse(text, {lists: atom.config.get('markdown-mindmap.parseListItems'), linkify: true})
           data = transformHeadings(transformLinks(data, node.href))
           node.children = data.children
