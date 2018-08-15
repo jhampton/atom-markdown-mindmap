@@ -6,11 +6,11 @@ Grim = require 'grim'
 _ = require 'underscore-plus'
 fs = require 'fs-plus'
 {File} = require 'atom'
-markmapParse = require 'markmap/src/parse.markdown'
-markmapMindmap = require 'markmap/src/view.mindmap'
-transformHeadings = require 'markmap/src/transform.headings'
+markmapParse = require 'markmap/parse.markdown'
+markmapMindmap = require 'markmap/view.mindmap'
+transformHeadings = require 'markmap/transform.headings'
 d3 = require 'd3'
-require 'markmap/src/d3-flextree'
+require 'markmap/d3-flextree'
 
 SVG_PADDING = 15
 
@@ -229,9 +229,10 @@ class MarkdownMindmapView extends ScrollView
     nodes = @mindmap.svg.selectAll('g.markmap-node')
     toggleHandler = () =>
       node = arguments[0]
+      console.log(node)
       if node.href and not (node.children or node._children)
         (new File(node.href)).read().then (text) =>
-          data = markmapParse(text, {lists: atom.config.get('markdown-mindmap.parseListItems')})
+          data = markmapParse(text, {lists: atom.config.get('markdown-mindmap.parseListItems'), linkify: true})
           data = transformHeadings(transformLinks(data, node.href))
           node.children = data.children
           @mindmap.update.apply(@mindmap, arguments)
@@ -239,10 +240,11 @@ class MarkdownMindmapView extends ScrollView
       else
         @mindmap.click.apply(@mindmap, arguments)
         @hookEvents()
-    nodes.on('click', null)
+    nodes.on('click', (d) -> console.log("ddd", d))
     nodes.selectAll('circle').on('click', toggleHandler)
     nodes.selectAll('text,rect').on 'click', (d) =>
       @scrollToLine d.line
+      toggleHandler(d)
 
   renderMarkdownText: (text, filepath) ->
       # if error
